@@ -16,8 +16,10 @@ Labelname::~Labelname()
 {
     delete ui;
 }
+
 void Labelname::submit()
 {
+    if(ui->labelName->text() =="")
     {
         QMessageBox::warning(this,"","标签名不能为空");
     }
