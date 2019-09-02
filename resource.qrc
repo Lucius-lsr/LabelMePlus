@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>color/red.png</file>
+        <file>color/blue.png</file>
+        <file>color/yellow.png</file>
+        <file>color/green.png</file>
+        <file>color/orange.png</file>
+        <file>color/purple.png</file>
+        <file>color/rect.png</file>
+    </qresource>
+</RCC>
