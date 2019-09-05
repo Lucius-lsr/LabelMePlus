@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>885</width>
+    <width>866</width>
     <height>832</height>
    </rect>
   </property>
@@ -230,8 +230,8 @@
        <rect>
         <x>60</x>
         <y>20</y>
-        <width>16</width>
-        <height>61</height>
+        <width>28</width>
+        <height>84</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -263,8 +263,8 @@
        <rect>
         <x>350</x>
         <y>20</y>
-        <width>16</width>
-        <height>61</height>
+        <width>28</width>
+        <height>84</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -296,8 +296,8 @@
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>61</width>
-        <height>16</height>
+        <width>96</width>
+        <height>24</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
@@ -329,8 +329,8 @@
        <rect>
         <x>10</x>
         <y>360</y>
-        <width>61</width>
-        <height>16</height>
+        <width>96</width>
+        <height>24</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -540,8 +540,8 @@
        <rect>
         <x>60</x>
         <y>20</y>
-        <width>16</width>
-        <height>61</height>
+        <width>28</width>
+        <height>84</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -573,8 +573,8 @@
        <rect>
         <x>350</x>
         <y>20</y>
-        <width>16</width>
-        <height>61</height>
+        <width>28</width>
+        <height>84</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -606,8 +606,8 @@
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>61</width>
-        <height>16</height>
+        <width>96</width>
+        <height>24</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -639,8 +639,8 @@
        <rect>
         <x>10</x>
         <y>360</y>
-        <width>61</width>
-        <height>16</height>
+        <width>96</width>
+        <height>24</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -853,8 +853,8 @@
        <rect>
         <x>60</x>
         <y>20</y>
-        <width>16</width>
-        <height>61</height>
+        <width>28</width>
+        <height>84</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -886,8 +886,8 @@
        <rect>
         <x>350</x>
         <y>20</y>
-        <width>16</width>
-        <height>61</height>
+        <width>28</width>
+        <height>84</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -919,8 +919,8 @@
        <rect>
         <x>10</x>
         <y>360</y>
-        <width>61</width>
-        <height>16</height>
+        <width>96</width>
+        <height>24</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -952,8 +952,8 @@
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>61</width>
-        <height>16</height>
+        <width>96</width>
+        <height>24</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -984,7 +984,7 @@
     <widget class="QTabWidget" name="tabWidget">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>490</x>
        <y>30</y>
        <width>161</width>
        <height>181</height>
@@ -1209,7 +1209,7 @@
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>640</x>
+       <x>660</x>
        <y>30</y>
        <width>161</width>
        <height>221</height>
@@ -1265,7 +1265,7 @@
     <widget class="QWidget" name="verticalLayoutWidget_2">
      <property name="geometry">
       <rect>
-       <x>640</x>
+       <x>660</x>
        <y>260</y>
        <width>161</width>
        <height>151</height>
@@ -1291,8 +1291,8 @@
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>230</y>
+       <x>580</x>
+       <y>250</y>
        <width>71</width>
        <height>161</height>
       </rect>
@@ -1339,8 +1339,8 @@
     <widget class="QGroupBox" name="groupBox_color">
      <property name="geometry">
       <rect>
-       <x>470</x>
-       <y>210</y>
+       <x>500</x>
+       <y>230</y>
        <width>81</width>
        <height>181</height>
       </rect>
@@ -1470,20 +1470,20 @@
     <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>420</x>
        <y>20</y>
        <width>51</width>
-       <height>381</height>
+       <height>391</height>
       </rect>
      </property>
      <property name="title">
-      <string>工具栏</string>
+      <string/>
      </property>
      <widget class="QToolButton" name="toolButton_save">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
+        <y>80</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1503,7 +1503,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>180</y>
+        <y>150</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1528,7 +1528,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>140</y>
+        <y>120</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1550,7 +1550,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>0</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1570,7 +1570,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>40</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1590,7 +1590,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>220</y>
+        <y>190</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1610,7 +1610,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>260</y>
+        <y>230</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1630,7 +1630,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>300</y>
+        <y>270</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1650,7 +1650,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>340</y>
+        <y>310</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -1666,18 +1666,58 @@ p, li { white-space: pre-wrap; }
        <string>...</string>
       </property>
      </widget>
+     <widget class="QToolButton" name="toolButton_magnify">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>350</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.SF NS Text'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;删除标记&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>...</string>
+      </property>
+      <property name="icon">
+       <iconset resource="resource.qrc">
+        <normaloff>:/icon/color/glass.png</normaloff>:/icon/color/glass.png</iconset>
+      </property>
+     </widget>
     </widget>
     <widget class="QLabel" name="label_20">
      <property name="geometry">
       <rect>
-       <x>570</x>
-       <y>210</y>
+       <x>590</x>
+       <y>230</y>
        <width>59</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
       <string>鼠标位置</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="magnifyingGlass">
+     <property name="geometry">
+      <rect>
+       <x>800</x>
+       <y>750</y>
+       <width>16</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>
@@ -1687,7 +1727,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>885</width>
+     <width>866</width>
      <height>22</height>
     </rect>
    </property>
@@ -1721,45 +1761,72 @@ p, li { white-space: pre-wrap; }
    <property name="text">
     <string>打开</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionOpenFiles">
    <property name="text">
     <string>打开文件夹</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionNext">
    <property name="text">
     <string>下一张</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionPrevious">
    <property name="text">
     <string>上一张</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionSave">
    <property name="text">
     <string>保存</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionClose">
    <property name="text">
     <string>关闭</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
   </action>
   <action name="actionRedo">
    <property name="text">
-    <string>redo</string>
+    <string>重做</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
   <action name="actionUndo">
    <property name="text">
-    <string>undo</string>
+    <string>撤销</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
    </property>
   </action>
   <action name="actionDeleteLabel">
    <property name="text">
-    <string>deleteLabel</string>
+    <string>删除标记</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>

@@ -20,6 +20,8 @@ class Label2D : public QMainWindow
 public:
     explicit Label2D(QWidget *parent = nullptr);
     ~Label2D();
+
+private:
     void showImage(QImage* img); // 展示图片
     void setCurrentInfo(QFileInfo); // 获取路径和名称并显示
     void openPicture(QFileInfo info); // 打开图片并显示相关信息
@@ -27,8 +29,6 @@ public:
     void beginSegm(); // 进入分割模式
     void updateLabelList(int); // 将标签信息显示在标签信息表中
     void updateLabeledPicture(int); // 将标签信息绘制在图片上
-
-protected:
     void paintEvent(QPaintEvent *);//重写窗体重绘事件
     void mousePressEvent(QMouseEvent *);//重写鼠标按下事件
     void mouseReleaseEvent(QMouseEvent *);//重写鼠标释放事件
@@ -58,14 +58,15 @@ private slots:
     void setPenShapeCircle(){penShape=1;}
     void segFinish();
     void segCanceled();
-    void unDo();//{}
-    void reDo();//{undoStack->redo();updateLabelList(currentItem);updateLabeledPicture(currentItem);}
+    void unDo();
+    void reDo();
+    void magnifying(){mag=!mag;if(InfoList.size()<1) mag=false;}
 
 private:
     Ui::Label2D *ui;
     QFileInfoList InfoList;
     int state; // 0代表画矩形，1代表画多边形，2代表分割标注
-    /*----------记录绘图状态-------------*/
+    //----------记录绘图状态-------------
     bool rect;
     bool rectPainting;
     bool poly;
@@ -92,6 +93,7 @@ private:
     QFileInfoList segLabels; // 存储分割标记的列表
     QUndoStack *undoStack;
     QImage oldImage; // 用来储存原来的图像
+    bool mag; // 放大镜模式
 
 };
 

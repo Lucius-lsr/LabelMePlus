@@ -7,5 +7,6 @@
         <file>color/orange.png</file>
         <file>color/purple.png</file>
         <file>color/rect.png</file>
+        <file>color/glass.png</file>
     </qresource>
 </RCC>

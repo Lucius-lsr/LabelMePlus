@@ -47,6 +47,7 @@ Label2D::Label2D(QWidget *parent) :
     penShape=0;
     segState=0;
     undoStack = new QUndoStack;
+    mag=false;
     /*------------初始化绘制状态----------------*/
     rect=false;
     rectPainting=false;
@@ -95,6 +96,7 @@ Label2D::Label2D(QWidget *parent) :
     connect(ui->actionRedo,SIGNAL(triggered()),this,SLOT(reDo()));
     connect(ui->toolButton_undo,SIGNAL(clicked()),this,SLOT(unDo()));
     connect(ui->toolButton_redo,SIGNAL(clicked()),this,SLOT(reDo()));
+    connect(ui->toolButton_magnify,SIGNAL(clicked()),this,SLOT(magnifying()));
     /*---------------工具栏图标设置------------------*/
     ui->toolButton_next->setArrowType(Qt::DownArrow);
     ui->toolButton_previous->setArrowType(Qt::UpArrow);
@@ -121,6 +123,7 @@ Label2D::Label2D(QWidget *parent) :
     ui->toolButton_close->setIconSize(QSize(50,50));
     ui->toolButton_redo->setIconSize(QSize(50,50));
     ui->toolButton_undo->setIconSize(QSize(50,50));
+    ui->toolButton_magnify->setIconSize(QSize(50,50));
 
     /*----------------------状态栏选择图片和标签----------------------*/
     connect(ui->nameList,SIGNAL(currentRowChanged(int)),this,SLOT(itemChange(int))); // 改变当前的图片
@@ -332,7 +335,8 @@ void Label2D::openPictureGroup()
             }
         }
     }
-
+    if(InfoList.size()==0)
+        return;
     updateLabelList(currentItem);
     openPicture(InfoList[currentItem]);
     updateLabeledPicture(currentItem);
@@ -383,6 +387,7 @@ void Label2D::itemChange(int item)
     openPicture(InfoList[item]);
     updateLabeledPicture(currentItem);
     ui->nameList->setCurrentRow(currentItem);
+    undoStack->clear(); // 清除撤销栈
 }
 
 void Label2D::beginLabel(QImage *img)
@@ -489,7 +494,6 @@ void Label2D::mouseMoveEvent(QMouseEvent *e)
         {
             if(isNear(location,polyRecorder[0])) // 形成闭合图形
             {
-                //qDebug()<<"near!";
                 polyfinish=true;
             }
         }
@@ -498,6 +502,22 @@ void Label2D::mouseMoveEvent(QMouseEvent *e)
     if(state==2)
     {
         currentPos=location;
+    }
+
+    if(mag&&InfoList.size()>0) // 放大镜模式
+    {
+        if(location.x()>=0&&location.x()<=550&&location.y()>=0&&location.y()<=550)
+        {
+            ui->magnifyingGlass->setGeometry(e->pos().x()-100,e->pos().y()-100,200,200);
+            QImage magnified=(ui->label_picture->pixmap())->toImage().copy(location.x()-40-bias.x(),location.y()-40-bias.y(),80,80);
+            magnified=magnified.scaled(200,200);
+            ui->magnifyingGlass->setPixmap(QPixmap::fromImage(magnified));
+        }
+        else
+        {
+            ui->magnifyingGlass->setGeometry(10,140,16,20);
+            ui->magnifyingGlass->clear();
+        }
     }
 
 }
@@ -650,7 +670,6 @@ void Label2D::paintEvent(QPaintEvent* e)//重写窗体重绘事件
                 painter.drawEllipse((currentPos-bias).x()-penSize,(currentPos-bias).y()-penSize,2*penSize,2*penSize);
             }
             ui->label_picture->setPixmap(QPixmap::fromImage(temp1));
-            //qDebug()<<tranColor;
         }
         if(segState==1) // 鼠标按下，在原来的画布上作画
         {
@@ -757,6 +776,7 @@ void Label2D::updateLabelList(int item)
     }
     else if(state==2) // 分割标记状态，从文件夹中读入图片代表标记
     {
+        segLabels.clear();
         QString path = InfoList[currentItem].path()+"/"+InfoList[currentItem].baseName(); // 找到存储分割标记的文件夹
         QDir dir(path);
         dir.setFilter(QDir::Files);
@@ -770,6 +790,7 @@ void Label2D::updateLabelList(int item)
             {
                 segLabels.append(Info2D);
                 QListWidgetItem* item=new QListWidgetItem(segLabels[t].baseName());
+                qDebug()<<segLabels[t].baseName();
                 ui->labelList->addItem(item);
                 t++;
             }
@@ -848,6 +869,19 @@ void Label2D::updateLabeledPicture(int item)
                 }
             }
             /*------------标签框和标签---------------*/
+            /*------------标签框---------------*/
+            int X=LabelInfoList[item][i].vertexsSets[0].x();
+            int Y=LabelInfoList[item][i].vertexsSets[0].y();
+            QColor c(255,255,255,100);
+            QBrush brush(c);
+            painter.setBrush(brush);
+            painter.setPen(QPen(QColor(255,255,255,100),1));
+            painter.drawRect(X-50, Y-20, 50, 20);
+            //------------标签---------------
+            QFont font("Helvetica");
+            painter.setFont(font);
+            painter.setPen(QPen(Qt::black,1));
+            painter.drawText(X-50, Y-20, 50, 20, 0, LabelInfoList[item][i].name);
         }
     }
     ui->label_picture->setPixmap(QPixmap::fromImage(*showed));
@@ -866,7 +900,6 @@ void Label2D::gotoNext()
 
 void Label2D::gotoPrevious()
 {
-    qDebug()<<currentItem;
     currentItem--;
     if(currentItem<0)
     {
@@ -1067,13 +1100,16 @@ void Label2D::labelChange(int label)
         }
         ui->label_picture->setPixmap(QPixmap::fromImage(*img));
     }
-
 }
 
 void Label2D::deletelabel()
 {
+    if(InfoList.size()==0)
+        return;
     if(state==0||state==1)
     {
+        if(LabelInfoList[currentItem].size()==0)
+            return;
         QVector<QVector<LabelInfo>> oldList= LabelInfoList;
         LabelInfoList[currentItem].erase(LabelInfoList[currentItem].begin()+currentLabel);
         updateLabelList(currentItem);
@@ -1093,6 +1129,8 @@ void Label2D::deletelabel()
     }
     else if(state==2)
     {
+        if(segLabels[currentItem].size()==0)
+            return;
         QFile labelFile(segLabels[currentLabel].path()+"/"+segLabels[currentLabel].fileName()); // 在文件夹中删除图片
         labelFile.remove();
         QFile textFile(segLabels[currentLabel].path()+"/"+segLabels[currentLabel].baseName()+".txt");
@@ -1166,7 +1204,6 @@ void Label2D::segFinish()
     if(textFile.open(QIODevice::WriteOnly|QIODevice::Text))
     {
         QTextStream out(&textFile);
-        qDebug()<<showed->height()<<showed->width();
         for(int y=0;y<showed->height();y++)
         {
             for(int x=0;x<showed->width();x++)
@@ -1183,6 +1220,7 @@ void Label2D::segFinish()
 
     updateLabelList(currentItem); // 刷新
     openPicture(InfoList[currentItem]);
+    undoStack->clear(); // 清除撤销栈
 }
 
 void Label2D::segCanceled()
@@ -1217,3 +1255,4 @@ void Label2D::reDo()
          ui->label_picture->setPixmap(QPixmap::fromImage(*showed));
     }
 }
+

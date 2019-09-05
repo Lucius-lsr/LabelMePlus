@@ -1,0 +1,50 @@
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.2
+-------------------------------------------------------------------------------
+count time : 2019-09-05 12:01:20
+count workspace : /Users/lishengrui/QT/pictureLabel
+total files : 28
+total code lines : 6575
+total comment lines : 555
+total blank lines : 299
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |             .h|            348|            102|             55|    5.3|
+   |           .cpp|           3041|            439|            233|     46|
+   |            .ui|           2793|             14|              0|     42|
+   |           .pro|             46|              0|             11|   0.70|
+   |           .qrc|             11|              0|              0|   0.17|
+   |          .user|            336|              0|              0|    5.1|
+   -------------------------------------------------------------------------
+color/blue.png, it is a binary file.
+color/green.png, it is a binary file.
+color/orange.png, it is a binary file.
+color/purple.png, it is a binary file.
+color/rect.png, it is a binary file.
+color/red.png, it is a binary file.
+color/yellow.png, it is a binary file.
+coordinate3d.cpp, code is 16, comment is 0, blank is 3.
+coordinate3d.h, code is 23, comment is 1, blank is 9.
+label2d.cpp, code is 1107, comment is 177, blank is 62.
+label2d.h, code is 87, comment is 49, blank is 10.
+label2d.ui, code is 836, comment is 7, blank is 0.
+label3d.cpp, code is 1831, comment is 257, blank is 147.
+label3d.h, code is 121, comment is 43, blank is 10.
+label3d.ui, code is 1774, comment is 7, blank is 0.
+labelname.cpp, code is 26, comment is 0, blank is 6.
+labelname.h, code is 20, comment is 1, blank is 8.
+labelname.ui, code is 94, comment is 0, blank is 0.
+labels.h, code is 47, comment is 4, blank is 5.
+main.cpp, code is 10, comment is 0, blank is 2.
+pictureLabel.pro, code is 46, comment is 0, blank is 11.
+pictureLabel.pro.user, code is 336, comment is 0, blank is 0.
+redocommand.cpp, code is 30, comment is 0, blank is 7.
+redocommand.h, code is 30, comment is 3, blank is 7.
+resource.qrc, code is 11, comment is 0, blank is 0.
+welcome.cpp, code is 21, comment is 5, blank is 6.
+welcome.h, code is 20, comment is 1, blank is 6.
+welcome.ui, code is 89, comment is 0, blank is 0.
+===============================================================================

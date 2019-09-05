@@ -1,6 +1,7 @@
 #include "label3d.h"
 #include "ui_label3d.h"
 #include "labelname.h"
+#include "redocommand.h"
 
 #include <QDir>
 #include <QFileDialog>
@@ -33,6 +34,8 @@ Label3D::Label3D(QWidget *parent) :
     penShape=0;
     rightButtonPressed = false;
     hasSaved = true;
+    undoStack = new QUndoStack;
+    mag=false;
     /*-----------坐标对象和相应划动条的连接------------------*/
     connect(ui->top_X_observer,SIGNAL(sliderMoved(int)),observer,SLOT(receiveXChange(int)));
     connect(observer,SIGNAL(publishXChange(int)),ui->front_X_observer,SLOT(setValue(int)));
@@ -120,10 +123,11 @@ Label3D::Label3D(QWidget *parent) :
     connect(ui->toolButton_close,SIGNAL(clicked()),this,SLOT(closeImage())); // 关闭的工具栏按钮
     connect(ui->actionDeleteLabel,SIGNAL(triggered()),this,SLOT(deleteLabel())); // 删除标记的菜单按钮
     connect(ui->toolButton_closeLabel,SIGNAL(clicked()),this,SLOT(deleteLabel())); // 删除标记的工具栏按钮
-    //connect(ui->actionUndo,SIGNAL(triggered()),this,SLOT(unDo()));
-    //connect(ui->actionRedo,SIGNAL(triggered()),this,SLOT(reDo()));
-    //connect(ui->toolButton_undo,SIGNAL(clicked()),this,SLOT(unDo()));
-    //connect(ui->toolButton_redo,SIGNAL(clicked()),this,SLOT(reDo()));*/
+    connect(ui->actionUndo,SIGNAL(triggered()),this,SLOT(unDo()));
+    connect(ui->actionRedo,SIGNAL(triggered()),this,SLOT(reDo()));
+    connect(ui->toolButton_undo,SIGNAL(clicked()),this,SLOT(unDo()));
+    connect(ui->toolButton_redo,SIGNAL(clicked()),this,SLOT(reDo()));
+    connect(ui->toolButton_magnify,SIGNAL(clicked()),this,SLOT(magnifying()));
     /*---------------工具栏图标设置------------------*/
     ui->toolButton_next->setArrowType(Qt::DownArrow);
     ui->toolButton_previous->setArrowType(Qt::UpArrow);
@@ -150,6 +154,7 @@ Label3D::Label3D(QWidget *parent) :
     ui->toolButton_close->setIconSize(QSize(50,50));
     ui->toolButton_redo->setIconSize(QSize(50,50));
     ui->toolButton_undo->setIconSize(QSize(50,50));
+    ui->toolButton_magnify->setIconSize(QSize(50,50));
 
     /*----------------------状态栏选择图片和标签----------------------*/
     connect(ui->nameList,SIGNAL(currentRowChanged(int)),this,SLOT(itemChange(int))); // 改变当前的图片
@@ -216,15 +221,33 @@ Label3D::~Label3D()
     delete observer;
     delete labeler1;
     delete labeler2;
-    for(int z=0;z<zSize;z++) // 高度为zSize
+    delete undoStack;
+    if(m_Image3D!=nullptr)
     {
-        for(int y=0;y<pixSize;y++) // 长宽均为261
+        for(int z=0;z<zSize;z++) // 高度为zSize
         {
-            delete m_Image3D[z][y];
+            for(int y=0;y<pixSize;y++) // 长宽均为261
+            {
+                delete m_Image3D[z][y];
+            }
+            delete m_Image3D[z];
         }
-        delete m_Image3D[z];
+        delete m_Image3D;
+        m_Image3D = nullptr;
     }
-    delete m_Image3D;
+    if(m_Image3DCopy!=nullptr)
+    {
+        for(int z=0;z<zSize;z++) // 高度为zSize
+        {
+            for(int y=0;y<pixSize;y++) // 长宽均为261
+            {
+                delete m_Image3DCopy[z][y];
+            }
+            delete m_Image3DCopy[z];
+        }
+        delete m_Image3DCopy;
+        m_Image3DCopy = nullptr;
+    }
 }
 
 void Label3D::openSinglePicture() // 打开单张3D图片,实际上是打开一系列的2D图片,完成3D图像的加载并调用一次观察函数
@@ -326,15 +349,27 @@ void Label3D::openPictureGroup()
 void Label3D::load3DImage(QDir dir)
 {
     /*---------------先清除原来的图片---------------*/
-    for(int z=0;z<zSize;z++) // 高度为zSize
+    if(m_Image3D!=nullptr)
     {
-        for(int y=0;y<pixSize;y++) // 长宽均为261
+        for(int z=0;z<zSize;z++) // 高度为zSize
         {
-            delete m_Image3D[z][y];
-            delete m_Image3DCopy[z][y];
+            for(int y=0;y<pixSize;y++) // 长宽均为261
+            {
+                delete m_Image3D[z][y];
+            }
+            delete m_Image3D[z];
         }
-        delete m_Image3D[z];
-        delete m_Image3DCopy[z];
+    }
+    if(m_Image3DCopy!=nullptr)
+    {
+        for(int z=0;z<zSize;z++) // 高度为zSize
+        {
+            for(int y=0;y<pixSize;y++) // 长宽均为261
+            {
+                delete m_Image3DCopy[z][y];
+            }
+            delete m_Image3DCopy[z];
+        }
     }
     /*---------------载入2D图片---------------*/
     dir.setFilter(QDir::Files);
@@ -428,13 +463,16 @@ void Label3D::load3DImage(QDir dir)
 void Label3D::load3DImageAsTemp(QDir dir)
 {
     /*---------------先清除原来的图片---------------*/
-    for(int z=0;z<zSize;z++) // 高度为zSize
+    if(m_Image3DCopy!=nullptr)
     {
-        for(int y=0;y<pixSize;y++) // 长宽均为261
+        for(int z=0;z<zSize;z++) // 高度为zSize
         {
-            delete m_Image3DCopy[z][y];
+            for(int y=0;y<pixSize;y++) // 长宽均为261
+            {
+                delete m_Image3DCopy[z][y];
+            }
+            delete m_Image3DCopy[z];
         }
-        delete m_Image3DCopy[z];
     }
     /*---------------载入2D图片---------------*/
     dir.setFilter(QDir::Files);
@@ -551,6 +589,7 @@ void Label3D::itemChange(int item)
 
     updateLabelList(currentItem);
     updateSlider();
+    undoStack->clear(); // 清除撤销栈
 }
 
 void Label3D::validate3View() // 观察函数，传入观察者坐标，得到图像
@@ -813,6 +852,45 @@ void Label3D::mouseMoveEvent(QMouseEvent *e) // 俯视图：120，110；正视�
             ui->coordinateZ->setText(QString::number(mouse->m_z));
         }
     }
+
+    if(mag&&m_3DInfos.size()>0) // 放大镜模式
+    {
+        if(e->pos().x()>120&&e->pos().x()<(120+261)) // 在俯视图范围内
+        {
+            if(e->pos().y()>110&&e->pos().y()<(110+261))
+            {
+                ui->magnifyingGlass->setGeometry(e->pos().x()-100,e->pos().y()-100,200,200);
+                QImage magnified=(ui->top_view->pixmap())->toImage().copy(mouse->m_x-40,mouse->m_y-40,80,80);
+                magnified=magnified.scaled(200,200);
+                ui->magnifyingGlass->setPixmap(QPixmap::fromImage(magnified));
+                return;
+            }
+        }
+        if(e->pos().x()>120&&e->pos().x()<(120+261)) // 在正视图范围内
+        {
+            if(e->pos().y()>490&&e->pos().y()<(490+261))
+            {
+                ui->magnifyingGlass->setGeometry(e->pos().x()-100,e->pos().y()-100,200,200);
+                QImage magnified=(ui->top_view->pixmap())->toImage().copy(mouse->m_x-40,zSize-mouse->m_z-40,80,80);
+                magnified=magnified.scaled(200,200);
+                ui->magnifyingGlass->setPixmap(QPixmap::fromImage(magnified));
+                return;
+            }
+        }
+        if(e->pos().x()>520&&e->pos().x()<(520+261)) // 在测试图范围内
+        {
+            if(e->pos().y()>490&&e->pos().y()<(490+261))
+            {
+                ui->magnifyingGlass->setGeometry(e->pos().x()-100,e->pos().y()-100,200,200);
+                QImage magnified=(ui->top_view->pixmap())->toImage().copy(mouse->m_y-40,zSize-mouse->m_z-40,80,80);
+                magnified=magnified.scaled(200,200);
+                ui->magnifyingGlass->setPixmap(QPixmap::fromImage(magnified));
+                return;
+            }
+        }
+        ui->magnifyingGlass->setGeometry(10,140,16,20);
+        ui->magnifyingGlass->clear();
+    }
 }
 
 void Label3D::mousePressEvent(QMouseEvent *e)
@@ -878,9 +956,29 @@ void Label3D::mouseReleaseEvent(QMouseEvent *e)
         int YView=observer->m_y;
         int ZView=observer->m_z;
 
+        /*----------------创建3D图片并复制---------------*/
+        QColor*** undoCopyOld;
+        undoCopyOld = new QColor** [zSize];
+        {
+           for(int z=0;z<zSize;z++) // 高度为height
+           {
+               undoCopyOld[z] = new QColor* [pixSize];
+               for(int y=0;y<pixSize;y++) // 长宽均为261
+               {
+                   undoCopyOld[z][y] = new QColor [pixSize];
+               }
+           }
+        }
+        for(int z=0;z<zSize;z++)
+            for(int y=0;y<pixSize;y++)
+                for(int x=0;x<pixSize;x++)
+                {
+                    undoCopyOld[z][y][x]=m_Image3DCopy[z][y][x];
+                }
+
         if(mousePos.x()>120&&mousePos.x()<(120+261)) // 在俯视图范围内修改这一层
         {
-            qDebug()<<"temporarily save";
+
             if(mousePos.y()>110&&mousePos.y()<(110+261))
             {
                 for(int y=0;y<pixSize;y++)
@@ -918,6 +1016,26 @@ void Label3D::mouseReleaseEvent(QMouseEvent *e)
                 }
             }
         }
+        /*----------------创建3D图片并复制---------------*/
+        QColor*** undoCopyNew;
+        undoCopyNew = new QColor** [zSize];
+        {
+           for(int z=0;z<zSize;z++) // 高度为height
+           {
+               undoCopyNew[z] = new QColor* [pixSize];
+               for(int y=0;y<pixSize;y++) // 长宽均为261
+               {
+                   undoCopyNew[z][y] = new QColor [pixSize];
+               }
+           }
+        }
+        for(int z=0;z<zSize;z++)
+            for(int y=0;y<pixSize;y++)
+                for(int x=0;x<pixSize;x++)
+                {
+                    undoCopyNew[z][y][x]=m_Image3DCopy[z][y][x];
+                }
+        undoStack->push(new SegAddDeleteCommand3D(&m_Image3DCopy,undoCopyOld,undoCopyNew,zSize,pixSize));
     }
 }
 
@@ -941,7 +1059,6 @@ void Label3D::paintEvent(QPaintEvent *e)//重写窗体重绘事件
                     QBrush brush(tranColor);
                     painter.setPen(pen);
                     painter.setBrush(brush);
-                    qDebug()<<"top"<<"pensize"<<penSize<<"penShape"<<penShape;
                     if(penShape==0) // 方形
                     {
                         QRect rectangle(mouse->m_x-penSize,mouse->m_y-penSize,2*penSize,2*penSize);
@@ -966,7 +1083,6 @@ void Label3D::paintEvent(QPaintEvent *e)//重写窗体重绘事件
                     QBrush brush(tranColor);
                     painter.setPen(pen);
                     painter.setBrush(brush);
-                    qDebug()<<"front"<<"pensize"<<penSize<<"penShape"<<penShape;
                     if(penShape==0) // 方形
                     {
                         QRect rectangle(mouse->m_x-penSize,zSize-mouse->m_z-penSize,2*penSize,2*penSize);
@@ -991,7 +1107,6 @@ void Label3D::paintEvent(QPaintEvent *e)//重写窗体重绘事件
                     QBrush brush(tranColor);
                     painter.setPen(pen);
                     painter.setBrush(brush);
-                    qDebug()<<"left"<<"pensize"<<penSize<<"penShape"<<penShape;
                     if(penShape==0) // 方形
                     {
                         QRect rectangle(mouse->m_y-penSize,zSize-mouse->m_z-penSize,2*penSize,2*penSize);
@@ -1074,29 +1189,8 @@ void Label3D::paintEvent(QPaintEvent *e)//重写窗体重绘事件
                 }
             }
         }
-
-        /*if(segState==1) // 鼠标按下，在原来的画布上作画
-        {
-            QPainter painter(showed);
-            painter.setRenderHints(QPainter::Antialiasing);
-            QPen pen(color, 1);
-            QBrush brush(color);
-            painter.setPen(pen);
-            painter.setBrush(brush);
-            if(penShape==0) // 方形
-            {
-                QRect rectangle((currentPos-bias).x()-penSize,(currentPos-bias).y()-penSize,2*penSize,2*penSize);
-                painter.drawRect(rectangle);
-            }
-            else if(penShape==1) // 圆形
-            {
-                painter.drawEllipse((currentPos-bias).x()-penSize,(currentPos-bias).y()-penSize,2*penSize,2*penSize);
-            }
-            ui->label_picture->setPixmap(QPixmap::fromImage(*showed));
-        }*/
     }
 }
-
 
 void Label3D::test()
 {
@@ -1117,12 +1211,18 @@ void Label3D::test()
         QImage tempImage=testImage;
         QPainter painter(&tempImage);
         QPen pen(Qt::red,3);
-        QBrush brush(Qt::yellow);
+        QBrush brush(Qt::blue);
         painter.setPen(pen);
         painter.setBrush(brush);
-        painter.drawRect(131-i,131-i,2*i,2*i);
+        if(i<50)
+        {
+            painter.drawRect(131-40,131-40,80,80);
+        }
+        else {
+            painter.drawRect(130-100+i,130-100+i,200-2*i,200-2*i);
+        }
 
-        QFile file("/Users/lishengrui/Desktop/3Dtest2/"+QString::number(i)+".jpg");//创建一个文件对象，存储用户选择的文件
+        QFile file("/Users/lishengrui/Desktop/3Dtest3/"+QString::number(i)+".jpg");//创建一个文件对象，存储用户选择的文件
         if (!file.open(QIODevice::ReadWrite))
         {
             return;
@@ -1289,11 +1389,11 @@ void Label3D::finishLabel()
     labelname->exec();
     if(labelname->name!="")
     {
-        //QVector<QVector<LabelInfo>> OldList=LabelInfoList;
+        QVector<QVector<LabelInfo3D>> OldList=LabelInfoList3D;
         LabelInfoList3D[currentItem].append(LabelInfo3D(labeler1->m_x,labeler1->m_y,labeler1->m_z,
                                                         labeler2->m_x,labeler2->m_y,labeler2->m_z,m_color,labelname->name));
         hasSaved=false; // 提示保存
-        //undoStack->push(new DecAddDeleteCommand(&LabelInfoList,OldList,LabelInfoList)); // 存入undo栈
+        undoStack->push(new DecAddDeleteCommand3D(&LabelInfoList3D,OldList,LabelInfoList3D)); // 存入undo栈
     }
     delete labelname;
     updateLabelList(currentItem);
@@ -1389,12 +1489,14 @@ QColor Label3D::stringToColor(QString s)
 
 void Label3D::deleteLabel()
 {
-    //QVector<QVector<LabelInfo3D>> oldList= LabelInfoList;
+    if(m_3DInfos.size()==0)
+        return;
     if(mode)
     {
+        if(LabelInfoList3D.size()==0)
+            return;
+        QVector<QVector<LabelInfo3D>> oldList= LabelInfoList3D;
         LabelInfoList3D[currentItem].erase(LabelInfoList3D[currentItem].begin()+currentLabel);
-        //updateLabelList(currentItem);
-        //updateLabeledPicture(currentItem);
         if(ui->labelList->count()==0) // 关闭了唯一一张
         {
             currentLabel=-1;
@@ -1407,12 +1509,14 @@ void Label3D::deleteLabel()
         }
         updateLabelList(currentItem);
         hasSaved=false; // 提示保存
-        //undoStack->push(new DecAddDeleteCommand(&LabelInfoList,oldList,LabelInfoList));
+        validate3View();
+        undoStack->push(new DecAddDeleteCommand3D(&LabelInfoList3D,oldList,LabelInfoList3D));
     }
     else // 分割模式下删除图片文件夹和txt文件
     {
+        if(segLabels.size()==0)
+            return;
         QDir labelFile(segLabels[currentLabel].filePath()); // 在文件夹中删除图片
-        qDebug()<<segLabels[currentLabel].filePath();
         labelFile.removeRecursively();
         QFile textFile(segLabels[currentLabel].path()+"/"+segLabels[currentLabel].baseName()+".txt");
         textFile.remove();
@@ -1479,6 +1583,7 @@ void Label3D::updateLabelList(int item)
     }
     else // 分割模式直接从文件夹中读取信息
     {
+        segLabels.clear();
         QString path = m_3DInfos[currentItem].filePath()+"/"+"segmentationLabel"; // 找到存储分割标记的文件夹
         QDir dir(path);
         dir.setFilter(QDir::Dirs|QDir::NoDotAndDotDot);
@@ -1527,7 +1632,6 @@ void Label3D::labelChange(int label)
         segLabels[currentLabel].baseName();
         QDir dir(segLabels[currentLabel].filePath()); // 打开当前选中的图片
         load3DImageAsTemp(dir); // 加载图片
-
     }
 
     updateSlider();
@@ -1599,7 +1703,6 @@ void Label3D::modeChanged(int m)
     {
         mode=false; // 分割标注
     }
-    qDebug()<<"Dection mode"<<mode;
     validate3View();
     updateLabelList(currentItem);
 }
@@ -1614,8 +1717,6 @@ void Label3D::segModeChanged(int m)
     {
         segRough=false; // 分割标注
     }
-    qDebug()<<"segRough"<<segRough;
-
 }
 
 void Label3D::roughSegFinish() // 完成粗略分割
@@ -1649,12 +1750,55 @@ void Label3D::roughSegFinish() // 完成粗略分割
         x2=labeler1->m_x;
     }
 
-    for(int z=z1;z<=z2;z++) // 分割着色
+
+    /*----------------创建3D图片并复制---------------*/
+    QColor*** undoCopyOld;
+    undoCopyOld = new QColor** [zSize];
+    {
+       for(int z=0;z<zSize;z++) // 高度为height
+       {
+           undoCopyOld[z] = new QColor* [pixSize];
+           for(int y=0;y<pixSize;y++) // 长宽均为261
+           {
+               undoCopyOld[z][y] = new QColor [pixSize];
+           }
+       }
+    }
+    for(int z=0;z<zSize;z++)
+        for(int y=0;y<pixSize;y++)
+            for(int x=0;x<pixSize;x++)
+            {
+                undoCopyOld[z][y][x]=m_Image3DCopy[z][y][x];
+            }
+
+    /*------------分割着色-----------*/
+    for(int z=z1;z<=z2;z++)
         for(int y=y1;y<=y2;y++)
             for(int x=x1;x<=x2;x++)
             {
                 m_Image3DCopy[z][y][x]=m_color;
             }
+
+    /*----------------创建3D图片并复制---------------*/
+    QColor*** undoCopyNew;
+    undoCopyNew = new QColor** [zSize];
+    {
+       for(int z=0;z<zSize;z++) // 高度为height
+       {
+           undoCopyNew[z] = new QColor* [pixSize];
+           for(int y=0;y<pixSize;y++) // 长宽均为261
+           {
+               undoCopyNew[z][y] = new QColor [pixSize];
+           }
+       }
+    }
+    for(int z=0;z<zSize;z++)
+        for(int y=0;y<pixSize;y++)
+            for(int x=0;x<pixSize;x++)
+            {
+                undoCopyNew[z][y][x]=m_Image3DCopy[z][y][x];
+            }
+    undoStack->push(new SegAddDeleteCommand3D(&m_Image3DCopy,undoCopyOld,undoCopyNew,zSize,pixSize));
 
     validate3View();
 
@@ -1730,6 +1874,8 @@ void Label3D::segFinish()
     textFile.close();
 
     updateLabelList(currentItem);
+    delete labelname;
+    undoStack->clear(); // 清除撤销栈
 }
 
 void Label3D::segCanceled()
@@ -2064,5 +2210,19 @@ void Label3D::on_left_Z_observer_L_clicked()
     if(observer->m_z>=pixSize)
         observer->m_z=pixSize;
     updateSlider();
+    validate3View();
+}
+
+void Label3D::unDo()
+{
+    undoStack->undo();
+    updateLabelList(currentItem);
+    validate3View();
+}
+
+void Label3D::reDo()
+{
+    undoStack->redo();
+    updateLabelList(currentItem);
     validate3View();
 }

@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QDir>
 #include <QListWidgetItem>
+#include <QUndoStack>
 
 namespace Ui {
 class Label3D;
@@ -26,12 +27,12 @@ private:
     void mouseMoveEvent(QMouseEvent *);//重写鼠标移动事件
     void mousePressEvent(QMouseEvent *);//重写鼠标按下事件
     void mouseReleaseEvent(QMouseEvent *);//重写鼠标释放事件
+    void paintEvent(QPaintEvent *);//重写窗体重绘事件
     void updateLabelList(int); // 将标签信息显示在标签信息表中
     QString colorToString(QColor); // 颜色转名称
     QColor stringToColor(QString); // 名称转颜色
     void updateSlider();
 
-    void paintEvent(QPaintEvent *);//重写窗体重绘事件
 
 protected slots:
     void openSinglePicture(); // 打开单张图片
@@ -58,6 +59,10 @@ protected slots:
     void setPenShapeCircle(){penShape=1;}
     void segFinish();
     void segCanceled();
+    void unDo();
+    void reDo();
+    void magnifying(){mag=!mag;if(m_3DInfos.size()<1) mag=false;}
+
 
 
 private slots:
@@ -126,6 +131,8 @@ private:
     bool rightButtonPressed;
     QFileInfoList segLabels; // 存储分割标记的列表
     bool hasSaved;
+    QUndoStack *undoStack;
+    bool mag; // 放大镜模式
 
 };
 
