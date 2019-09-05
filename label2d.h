@@ -44,7 +44,7 @@ private slots:
     void savelabeled(); // 保存
     void closelabeled(); // 关闭当前图片
     void labelChange(int); // 变更选择的标签
-    void labelChange(QListWidgetItem* ){labelChange(currentLabel);} // 用于特殊情况debug
+    void labelChange(QListWidgetItem* ){labelChange(currentLabel);} // 用于只有一个label的特殊情况
     void deletelabel(); // 删除标注
     QString colorToString(QColor); // 颜色转名称
     QColor stringToColor(QString); // 名称转颜色
@@ -63,13 +63,11 @@ private slots:
 
 private:
     Ui::Label2D *ui;
-    QString dirPath;
     QFileInfoList InfoList;
     int state; // 0代表画矩形，1代表画多边形，2代表分割标注
-
+    /*----------记录绘图状态-------------*/
     bool rect;
     bool rectPainting;
-
     bool poly;
     bool polyPainting;
     bool polyfinish;

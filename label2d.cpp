@@ -38,6 +38,7 @@ Label2D::Label2D(QWidget *parent) :
     ui(new Ui::Label2D)
 {
     ui->setupUi(this);
+    /*-----------一些必须的变量初始化------------------*/
     color = Qt::red;
     showed = new QImage;
     state=0;
@@ -57,7 +58,7 @@ Label2D::Label2D(QWidget *parent) :
     ui->currentDir->setReadOnly(true);
     ui->coordinateX->setText("---");
     ui->coordinateY->setText("---");
-
+    /*---------------颜色选项------------------*/
     QRadioButton** colorButtons = new QRadioButton*[6];
     colorButtons[0]=ui->radioButton_red;
     colorButtons[1]=ui->radioButton_ora;
@@ -73,6 +74,27 @@ Label2D::Label2D(QWidget *parent) :
     }
     connect(m, SIGNAL(mapped(int)), this, SLOT(colorchange(int)));
 
+    /*----------------------菜单栏和工具栏-------------------------*/
+    connect(ui->actionOpen,SIGNAL(triggered()),this,SLOT(openSinglePicture())); // 点击打开
+    connect(ui->toolButton_open,SIGNAL(clicked()),this,SLOT(openSinglePicture())); // 打开的工具栏按钮
+    connect(ui->actionOpenFiles,SIGNAL(triggered()),this,SLOT(openPictureGroup())); // 点击打开文件夹
+    connect(ui->toolButton_openFiles,SIGNAL(clicked()),this,SLOT(openPictureGroup())); // 打开文件夹的工具栏按钮
+    connect(ui->actionNext,SIGNAL(triggered()),this,SLOT(gotoNext())); // 下一张的菜单按钮
+    connect(ui->actionPrevious,SIGNAL(triggered()),this,SLOT(gotoPrevious())); // 上一张的菜单按钮
+    connect(ui->toolButton_next,SIGNAL(clicked()),this,SLOT(gotoNext())); // 下一张的工具栏按钮
+    connect(ui->toolButton_previous,SIGNAL(clicked()),this,SLOT(gotoPrevious())); // 上一张的工具栏按钮
+    connect(ui->actionSave,SIGNAL(triggered()),this,SLOT(savelabeled())); // 保存的菜单按钮
+    connect(ui->toolButton_save,SIGNAL(clicked()),this,SLOT(savelabeled())); // 保存的工具栏按钮
+    connect(ui->actionClose,SIGNAL(triggered()),this,SLOT(closelabeled())); // 关闭的菜单按钮
+    connect(ui->toolButton_close,SIGNAL(clicked()),this,SLOT(closelabeled())); // 关闭的工具栏按钮
+    connect(ui->actionDeletelabel,SIGNAL(triggered()),this,SLOT(deletelabel())); // 删除标记的菜单按钮
+    connect(ui->toolButton_closeLabel,SIGNAL(clicked()),this,SLOT(deletelabel())); // 删除标记的工具栏按钮
+    connect(ui->buttonRect,SIGNAL(pressed()),this,SLOT(rectMode())); // 矩形绘图
+    connect(ui->buttonPoly,SIGNAL(pressed()),this,SLOT(polyMode())); // 多边形绘图
+    connect(ui->actionUndo,SIGNAL(triggered()),this,SLOT(unDo()));
+    connect(ui->actionRedo,SIGNAL(triggered()),this,SLOT(reDo()));
+    connect(ui->toolButton_undo,SIGNAL(clicked()),this,SLOT(unDo()));
+    connect(ui->toolButton_redo,SIGNAL(clicked()),this,SLOT(reDo()));
     /*---------------工具栏图标设置------------------*/
     ui->toolButton_next->setArrowType(Qt::DownArrow);
     ui->toolButton_previous->setArrowType(Qt::UpArrow);
@@ -101,33 +123,9 @@ Label2D::Label2D(QWidget *parent) :
     ui->toolButton_undo->setIconSize(QSize(50,50));
 
     /*----------------------状态栏选择图片和标签----------------------*/
-
     connect(ui->nameList,SIGNAL(currentRowChanged(int)),this,SLOT(itemChange(int))); // 改变当前的图片
     connect(ui->labelList,SIGNAL(currentRowChanged(int)),this,SLOT(labelChange(int))); // 改变选择的标签
     connect(ui->labelList,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(labelChange(QListWidgetItem*)));
-
-    /*----------------------菜单栏和工具栏-------------------------*/
-    connect(ui->actionOpen,SIGNAL(triggered()),this,SLOT(openSinglePicture())); // 点击打开
-    connect(ui->toolButton_open,SIGNAL(clicked()),this,SLOT(openSinglePicture())); // 打开的工具栏按钮
-    connect(ui->actionOpenFiles,SIGNAL(triggered()),this,SLOT(openPictureGroup())); // 点击打开文件夹
-    connect(ui->toolButton_openFiles,SIGNAL(clicked()),this,SLOT(openPictureGroup())); // 打开文件夹的工具栏按钮
-    connect(ui->actionNext,SIGNAL(triggered()),this,SLOT(gotoNext())); // 下一张的菜单按钮
-    connect(ui->actionPrevious,SIGNAL(triggered()),this,SLOT(gotoPrevious())); // 上一张的菜单按钮
-    connect(ui->toolButton_next,SIGNAL(clicked()),this,SLOT(gotoNext())); // 下一张的工具栏按钮
-    connect(ui->toolButton_previous,SIGNAL(clicked()),this,SLOT(gotoPrevious())); // 上一张的工具栏按钮
-    connect(ui->actionSave,SIGNAL(triggered()),this,SLOT(savelabeled())); // 保存的菜单按钮
-    connect(ui->toolButton_save,SIGNAL(clicked()),this,SLOT(savelabeled())); // 保存的工具栏按钮
-    connect(ui->actionClose,SIGNAL(triggered()),this,SLOT(closelabeled())); // 关闭的菜单按钮
-    connect(ui->toolButton_close,SIGNAL(clicked()),this,SLOT(closelabeled())); // 关闭的工具栏按钮
-    connect(ui->actionDeletelabel,SIGNAL(triggered()),this,SLOT(deletelabel())); // 删除标记的菜单按钮
-    connect(ui->toolButton_closeLabel,SIGNAL(clicked()),this,SLOT(deletelabel())); // 删除标记的工具栏按钮
-    connect(ui->buttonRect,SIGNAL(pressed()),this,SLOT(rectMode())); // 矩形绘图
-    connect(ui->buttonPoly,SIGNAL(pressed()),this,SLOT(polyMode())); // 多边形绘图
-    /*----------------------撤销和重做-------------------------*/
-    connect(ui->actionUndo,SIGNAL(triggered()),this,SLOT(unDo()));
-    connect(ui->actionRedo,SIGNAL(triggered()),this,SLOT(reDo()));
-    connect(ui->toolButton_undo,SIGNAL(clicked()),this,SLOT(unDo()));
-    connect(ui->toolButton_redo,SIGNAL(clicked()),this,SLOT(reDo()));
     /*----------------------变更标注模式-------------------------*/
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(modeChanged(int)));
     connect(ui->penSize1,SIGNAL(pressed()),this,SLOT(setPenSize1()));
@@ -144,6 +142,7 @@ Label2D::~Label2D()
     delete showed;
     delete ui;
     delete undoStack;
+    delete labeled;
 }
 
 void Label2D::openSinglePicture()
@@ -164,7 +163,8 @@ void Label2D::openSinglePicture()
     QFileInfo fileinfo=QFileInfo(path); // 首先添加到图片列表中
     InfoList.append(fileinfo);
     LabelInfoList.append(emptyLabelInfos);
-    showImage(img); // 展示图片
+    labeled = img;
+    showImage(labeled); // 展示图片
     setCurrentInfo(fileinfo); // 显示当前图片信息
 
     /*----------------------重置列表------------------------------*/
@@ -221,6 +221,7 @@ void Label2D::openSinglePicture()
         updateLabelList(currentItem);
         updateLabeledPicture(currentItem);
     }
+    delete img;
 }
 
 void Label2D::setCurrentInfo(QFileInfo fileInfo)
@@ -231,7 +232,7 @@ void Label2D::setCurrentInfo(QFileInfo fileInfo)
     ui->currentPicture->setText(file_name);
     ui->currentDir->setText(file_path);
 
-    dirPath=file_path; // 将目录设置为当前图片所在的目录
+    //dirPath=file_path; // 将目录设置为当前图片所在的目录
 }
 
 void Label2D::showImage(QImage* img)
@@ -655,9 +656,8 @@ void Label2D::paintEvent(QPaintEvent* e)//重写窗体重绘事件
         {
             QPainter painter(showed);
             painter.setRenderHints(QPainter::Antialiasing);
-            QColor tranColor(color.red(),color.green(),color.blue(),100);
-            QPen pen(tranColor, 1);
-            QBrush brush(tranColor);
+            QPen pen(color, 1);
+            QBrush brush(color);
             painter.setPen(pen);
             painter.setBrush(brush);
             if(penShape==0) // 方形
@@ -706,12 +706,12 @@ void Label2D::updateLabelList(int item)
     {
         return;
     }
-    if(LabelInfoList[item].size()<1) // 图片没有标签直接返回
-    {
-        return;
-    }
     if(state==0||state==1) // 检测标记状态
     {
+        if(LabelInfoList[item].size()<1) // 图片没有标签直接返回
+        {
+            return;
+        }
         QVector<LabelInfo> thisInfo = LabelInfoList[item];
         for(int i=0;i<thisInfo.size();i++)
         {
@@ -760,11 +760,19 @@ void Label2D::updateLabelList(int item)
         QString path = InfoList[currentItem].path()+"/"+InfoList[currentItem].baseName(); // 找到存储分割标记的文件夹
         QDir dir(path);
         dir.setFilter(QDir::Files);
-        segLabels = dir.entryInfoList();
-        for(int i=0;i<segLabels.size();i++)
+        QFileInfoList list = dir.entryInfoList();
+        int t=0;
+        for(int i=0;i<list.size();i++)
         {
-            QListWidgetItem* item=new QListWidgetItem(segLabels[i].baseName());
-            ui->labelList->addItem(item);
+            QFileInfo Info2D(list[i].filePath());
+            if(Info2D.suffix()=="jpg"||Info2D.suffix()=="jpeg"||Info2D.suffix()=="bmp" //保证只读入图片
+                    ||Info2D.suffix()=="gif"||Info2D.suffix()=="png")
+            {
+                segLabels.append(Info2D);
+                QListWidgetItem* item=new QListWidgetItem(segLabels[t].baseName());
+                ui->labelList->addItem(item);
+                t++;
+            }
         }
         if(ui->labelList->count()==0)
         {
@@ -858,6 +866,7 @@ void Label2D::gotoNext()
 
 void Label2D::gotoPrevious()
 {
+    qDebug()<<currentItem;
     currentItem--;
     if(currentItem<0)
     {
@@ -871,7 +880,7 @@ void Label2D::savelabeled()
 {
     if(InfoList.size()==0)
         return;
-    /*---------------------首先创建一个文件夹----------------------*/
+    //---------------------首先创建一个文件夹----------------------
     QDir *labeledPicture = new QDir;
     bool exist = labeledPicture->exists(InfoList[currentItem].absolutePath()+"/labeledPicture");
     if(!exist)
@@ -879,18 +888,19 @@ void Label2D::savelabeled()
         labeledPicture->mkdir(InfoList[currentItem].absolutePath()+"/labeledPicture"); // 创建labeledPicture文件夹
     }
 
-    /*---------------------将图片保存在文件夹中----------------------*/
+    //---------------------将图片保存在文件夹中----------------------
     QFile file(InfoList[currentItem].absolutePath()+"/labeledPicture/"+InfoList[currentItem].fileName());//创建一个文件对象，存储用户选择的文件
     if (!file.open(QIODevice::ReadWrite))
     {
         return;
     }
-    /*----------------------------以流方式写入文件-------------------------*/
+    //----------------------------以流方式写入文件-------------------------
     QByteArray ba;
     QBuffer buffer(&ba);
     showed->save(&buffer, "JPG");//把图片以流方式写入文件缓存流中
     buffer.open(QIODevice::WriteOnly);
     file.write(ba);//将流中的图片写入文件对象当中
+
     /*---------------------将标签信息保存在同一个目录中----------------------*/
     QFile textFile(InfoList[currentItem].absolutePath()+"/"+InfoList[currentItem].baseName()+".txt");
     if(textFile.open(QIODevice::WriteOnly|QIODevice::Text))
@@ -1085,6 +1095,8 @@ void Label2D::deletelabel()
     {
         QFile labelFile(segLabels[currentLabel].path()+"/"+segLabels[currentLabel].fileName()); // 在文件夹中删除图片
         labelFile.remove();
+        QFile textFile(segLabels[currentLabel].path()+"/"+segLabels[currentLabel].baseName()+".txt");
+        textFile.remove();
         segLabels.erase(segLabels.begin()+currentLabel); // 在列表中删除条目
         updateLabelList(currentItem);
     }
@@ -1132,7 +1144,6 @@ void Label2D::segFinish()
     labelname->exec();
     if(labelname->name=="")
     {
-        openPicture(InfoList[currentItem]);
         delete labelname;
         return;
     }
@@ -1148,6 +1159,27 @@ void Label2D::segFinish()
     showed->save(&buffer, "JPG");//把图片以流方式写入文件缓存流中
     buffer.open(QIODevice::WriteOnly);
     file.write(ba);//将流中的图片写入文件对象当中
+
+    /*----------------------同时生成一个txt文件，记录所有被标记的像素--------------------*/
+    /*---------------------将标签信息保存在同一个目录中----------------------*/
+    QFile textFile(InfoList[currentItem].absolutePath()+"/"+InfoList[currentItem].baseName()+"/"+labelname->name+".txt");
+    if(textFile.open(QIODevice::WriteOnly|QIODevice::Text))
+    {
+        QTextStream out(&textFile);
+        qDebug()<<showed->height()<<showed->width();
+        for(int y=0;y<showed->height();y++)
+        {
+            for(int x=0;x<showed->width();x++)
+            {
+                QColor temp=showed->pixel(x,y);
+                if(temp==color)
+                {
+                    out<<"("<<x<<","<<y<<")"<<" ";
+                }
+            }
+        }
+    }
+    textFile.close();
 
     updateLabelList(currentItem); // 刷新
     openPicture(InfoList[currentItem]);

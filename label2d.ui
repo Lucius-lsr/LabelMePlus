@@ -172,9 +172,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>0</y>
+      <y>40</y>
       <width>51</width>
-      <height>441</height>
+      <height>381</height>
      </rect>
     </property>
     <property name="title">
@@ -829,8 +829,8 @@ p, li { white-space: pre-wrap; }
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        coordinate3d.cpp \
         label2d.cpp \
         label3d.cpp \
         labelname.cpp \
@@ -33,6 +34,7 @@ SOURCES += \
         welcome.cpp
 
 HEADERS += \
+        coordinate3d.h \
         label2d.h \
         label3d.h \
         labelname.h \
