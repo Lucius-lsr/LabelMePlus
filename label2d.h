@@ -50,17 +50,17 @@ private slots:
     QColor stringToColor(QString); // 名称转颜色
     void rectMode(){state=0;updateLabelList(currentItem);updateLabeledPicture(currentItem);} // 转化为矩形标注模式
     void polyMode(){state=1;updateLabelList(currentItem);updateLabeledPicture(currentItem);} // 转化为多边形标注模式
-    void modeChanged(int i);
+    void modeChanged(int i); // 模式变更
     void setPenSize1(){penSize=3;}
     void setPenSize2(){penSize=5;}
-    void setPenSize3(){penSize=10;}
-    void setPenShapeRect(){penShape=0;}
-    void setPenShapeCircle(){penShape=1;}
-    void segFinish();
-    void segCanceled();
-    void unDo();
-    void reDo();
-    void magnifying(){mag=!mag;if(InfoList.size()<1) mag=false;}
+    void setPenSize3(){penSize=10;} // 画笔粗细调节
+    void setPenShapeRect(){penShape=0;} // 方形画笔
+    void setPenShapeCircle(){penShape=1;} // 圆形画笔
+    void segFinish(); // 分割标记完成
+    void segCanceled(); // 分割标记取消
+    void unDo(); // 撤销
+    void reDo(); // 重做
+    void magnifying(){mag=!mag;if(InfoList.size()<1) mag=false;} // 放大镜模式
 
 private:
     Ui::Label2D *ui;

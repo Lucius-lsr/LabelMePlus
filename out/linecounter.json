@@ -219,6 +219,230 @@
                     "filename": "welcome.ui"
                 }
             ]
+        },
+        {
+            "version": "0.2.2",
+            "counttime": "2019-09-05 23:39:34",
+            "filesum": 29,
+            "codesum": 6991,
+            "commentsum": 558,
+            "blanksum": 315,
+            "statistics": {
+                ".h": {
+                    "code": 381,
+                    "comment": 104,
+                    "blank": 60
+                },
+                ".cpp": {
+                    "code": 3315,
+                    "comment": 438,
+                    "blank": 244
+                },
+                ".ui": {
+                    "code": 2901,
+                    "comment": 16,
+                    "blank": 0
+                },
+                ".pro": {
+                    "code": 46,
+                    "comment": 0,
+                    "blank": 11
+                },
+                ".qrc": {
+                    "code": 12,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".user": {
+                    "code": 336,
+                    "comment": 0,
+                    "blank": 0
+                }
+            },
+            "filelist": [
+                {
+                    "filename": "color/blue.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "color/glass.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "color/green.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "color/orange.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "color/purple.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "color/rect.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "color/red.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "color/yellow.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 3,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "coordinate3d.cpp"
+                },
+                {
+                    "blank": 9,
+                    "code": 23,
+                    "comment": 1,
+                    "filename": "coordinate3d.h"
+                },
+                {
+                    "blank": 62,
+                    "code": 1146,
+                    "comment": 180,
+                    "filename": "label2d.cpp"
+                },
+                {
+                    "blank": 10,
+                    "code": 89,
+                    "comment": 48,
+                    "filename": "label2d.h"
+                },
+                {
+                    "blank": 0,
+                    "code": 877,
+                    "comment": 8,
+                    "filename": "label2d.ui"
+                },
+                {
+                    "blank": 151,
+                    "code": 2011,
+                    "comment": 251,
+                    "filename": "label3d.cpp"
+                },
+                {
+                    "blank": 11,
+                    "code": 127,
+                    "comment": 44,
+                    "filename": "label3d.h"
+                },
+                {
+                    "blank": 0,
+                    "code": 1841,
+                    "comment": 8,
+                    "filename": "label3d.ui"
+                },
+                {
+                    "blank": 6,
+                    "code": 26,
+                    "comment": 0,
+                    "filename": "labelname.cpp"
+                },
+                {
+                    "blank": 8,
+                    "code": 20,
+                    "comment": 1,
+                    "filename": "labelname.h"
+                },
+                {
+                    "blank": 0,
+                    "code": 94,
+                    "comment": 0,
+                    "filename": "labelname.ui"
+                },
+                {
+                    "blank": 5,
+                    "code": 47,
+                    "comment": 4,
+                    "filename": "labels.h"
+                },
+                {
+                    "blank": 2,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "main.cpp"
+                },
+                {
+                    "blank": 11,
+                    "code": 46,
+                    "comment": 0,
+                    "filename": "pictureLabel.pro"
+                },
+                {
+                    "blank": 0,
+                    "code": 336,
+                    "comment": 0,
+                    "filename": "pictureLabel.pro.user"
+                },
+                {
+                    "blank": 14,
+                    "code": 85,
+                    "comment": 2,
+                    "filename": "redocommand.cpp"
+                },
+                {
+                    "blank": 11,
+                    "code": 55,
+                    "comment": 5,
+                    "filename": "redocommand.h"
+                },
+                {
+                    "blank": 0,
+                    "code": 12,
+                    "comment": 0,
+                    "filename": "resource.qrc"
+                },
+                {
+                    "blank": 6,
+                    "code": 21,
+                    "comment": 5,
+                    "filename": "welcome.cpp"
+                },
+                {
+                    "blank": 6,
+                    "code": 20,
+                    "comment": 1,
+                    "filename": "welcome.h"
+                },
+                {
+                    "blank": 0,
+                    "code": 89,
+                    "comment": 0,
+                    "filename": "welcome.ui"
+                }
+            ]
         }
     ]
 }

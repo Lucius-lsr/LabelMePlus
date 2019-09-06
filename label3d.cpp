@@ -373,7 +373,7 @@ void Label3D::load3DImage(QDir dir)
     }
     /*---------------载入2D图片---------------*/
     dir.setFilter(QDir::Files);
-    dir.setSorting(QDir::Time);
+    dir.setSorting(QDir::Name);
     QFileInfoList list = dir.entryInfoList();
     /*-----------------统计有效2D图片数量作为z的高度--------------*/
     zSize=0;
@@ -871,7 +871,7 @@ void Label3D::mouseMoveEvent(QMouseEvent *e) // 俯视图：120，110；正视�
             if(e->pos().y()>490&&e->pos().y()<(490+261))
             {
                 ui->magnifyingGlass->setGeometry(e->pos().x()-100,e->pos().y()-100,200,200);
-                QImage magnified=(ui->top_view->pixmap())->toImage().copy(mouse->m_x-40,zSize-mouse->m_z-40,80,80);
+                QImage magnified=(ui->front_view->pixmap())->toImage().copy(mouse->m_x-40,zSize-mouse->m_z-40,80,80);
                 magnified=magnified.scaled(200,200);
                 ui->magnifyingGlass->setPixmap(QPixmap::fromImage(magnified));
                 return;
@@ -882,7 +882,7 @@ void Label3D::mouseMoveEvent(QMouseEvent *e) // 俯视图：120，110；正视�
             if(e->pos().y()>490&&e->pos().y()<(490+261))
             {
                 ui->magnifyingGlass->setGeometry(e->pos().x()-100,e->pos().y()-100,200,200);
-                QImage magnified=(ui->top_view->pixmap())->toImage().copy(mouse->m_y-40,zSize-mouse->m_z-40,80,80);
+                QImage magnified=(ui->left_view->pixmap())->toImage().copy(mouse->m_y-40,zSize-mouse->m_z-40,80,80);
                 magnified=magnified.scaled(200,200);
                 ui->magnifyingGlass->setPixmap(QPixmap::fromImage(magnified));
                 return;

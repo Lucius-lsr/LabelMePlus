@@ -790,7 +790,6 @@ void Label2D::updateLabelList(int item)
             {
                 segLabels.append(Info2D);
                 QListWidgetItem* item=new QListWidgetItem(segLabels[t].baseName());
-                qDebug()<<segLabels[t].baseName();
                 ui->labelList->addItem(item);
                 t++;
             }
@@ -1114,7 +1113,7 @@ void Label2D::deletelabel()
         LabelInfoList[currentItem].erase(LabelInfoList[currentItem].begin()+currentLabel);
         updateLabelList(currentItem);
         updateLabeledPicture(currentItem);
-        if(ui->labelList->count()==0) // 关闭了唯一一张
+        if(LabelInfoList[currentItem].size()==0) // 关闭了唯一一张
         {
             currentLabel=-1;
             return;

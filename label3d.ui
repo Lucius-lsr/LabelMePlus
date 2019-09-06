@@ -230,8 +230,8 @@
        <rect>
         <x>60</x>
         <y>20</y>
-        <width>28</width>
-        <height>84</height>
+        <width>16</width>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -263,8 +263,8 @@
        <rect>
         <x>350</x>
         <y>20</y>
-        <width>28</width>
-        <height>84</height>
+        <width>16</width>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -296,8 +296,8 @@
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>96</width>
-        <height>24</height>
+        <width>61</width>
+        <height>16</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
@@ -329,8 +329,8 @@
        <rect>
         <x>10</x>
         <y>360</y>
-        <width>96</width>
-        <height>24</height>
+        <width>61</width>
+        <height>16</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -540,8 +540,8 @@
        <rect>
         <x>60</x>
         <y>20</y>
-        <width>28</width>
-        <height>84</height>
+        <width>16</width>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -606,8 +606,8 @@
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>96</width>
-        <height>24</height>
+        <width>61</width>
+        <height>16</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -639,8 +639,8 @@
        <rect>
         <x>10</x>
         <y>360</y>
-        <width>96</width>
-        <height>24</height>
+        <width>61</width>
+        <height>16</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -853,8 +853,8 @@
        <rect>
         <x>60</x>
         <y>20</y>
-        <width>28</width>
-        <height>84</height>
+        <width>16</width>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -886,8 +886,8 @@
        <rect>
         <x>350</x>
         <y>20</y>
-        <width>28</width>
-        <height>84</height>
+        <width>16</width>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -919,8 +919,8 @@
        <rect>
         <x>10</x>
         <y>360</y>
-        <width>96</width>
-        <height>24</height>
+        <width>61</width>
+        <height>16</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -952,8 +952,8 @@
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>96</width>
-        <height>24</height>
+        <width>61</width>
+        <height>16</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -1802,7 +1802,7 @@ p, li { white-space: pre-wrap; }
     <string>关闭</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Q</string>
+    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="actionRedo">

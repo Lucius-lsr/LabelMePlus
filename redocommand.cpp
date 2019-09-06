@@ -29,7 +29,6 @@ SegAddDeleteCommand::SegAddDeleteCommand(QImage* trueImage, QImage oldImage, QIm
 void SegAddDeleteCommand::undo()
 {
     *m_trueImage = m_oldImage;
-        qDebug()<<"undo,"<<"set to" << *m_trueImage;
 }
 
 void SegAddDeleteCommand::redo()
@@ -76,7 +75,6 @@ void SegAddDeleteCommand3D::undo()
 
 void SegAddDeleteCommand3D::redo()
 {
-    qDebug()<<"redo"<<"1" << *m_trueImage;
     for(int z=0;z<m_zSize;z++)
         for(int y=0;y<m_pixSize;y++)
             for(int x=0;x<m_pixSize;x++)
