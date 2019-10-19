@@ -47,6 +47,7 @@ Label2D::Label2D(QWidget *parent) :
     penShape=0;
     segState=0;
     undoStack = new QUndoStack;
+    undoStack->setActive(false);
     mag=false;
     /*------------初始化绘制状态----------------*/
     rect=false;
@@ -373,6 +374,8 @@ void Label2D::openPicture(QFileInfo info)
 
 void Label2D::itemChange(int item)
 {
+    if(LabelInfoList.size()==0)
+        return;
     if(item<0) // 避免自动设置为-1导致程序崩溃
         return;
     if(hasSaved==false) // 提示保存
@@ -809,6 +812,8 @@ void Label2D::updateLabelList(int item)
 
 void Label2D::updateLabeledPicture(int item)
 {
+    if(InfoList.size()==0)
+        return;
     if(state==2)
     {
         /*------------------------展示原图----------------------*/
@@ -902,7 +907,7 @@ void Label2D::gotoPrevious()
     currentItem--;
     if(currentItem<0)
     {
-        currentItem++;
+        currentItem=0;
         return;
     }
     itemChange(currentItem);
@@ -1128,7 +1133,7 @@ void Label2D::deletelabel()
     }
     else if(state==2)
     {
-        if(segLabels[currentItem].size()==0)
+        if(segLabels.size()==0)
             return;
         QFile labelFile(segLabels[currentLabel].path()+"/"+segLabels[currentLabel].fileName()); // 在文件夹中删除图片
         labelFile.remove();
@@ -1229,29 +1234,35 @@ void Label2D::segCanceled()
 
 void Label2D::unDo()
 {
-    undoStack->undo();
-    if(state==0||state==1)
+    if(undoStack->isActive())
     {
-        updateLabelList(currentItem);
-        updateLabeledPicture(currentItem);
-    }
-    else if(state==2)
-    {
-        ui->label_picture->setPixmap(QPixmap::fromImage(*showed));
+        undoStack->undo();
+        if(state==0||state==1)
+        {
+            updateLabelList(currentItem);
+            updateLabeledPicture(currentItem);
+        }
+        else if(state==2)
+        {
+            ui->label_picture->setPixmap(QPixmap::fromImage(*showed));
+        }
     }
 }
 
 void Label2D::reDo()
 {
-    undoStack->redo();
-    if(state==0||state==1)
+    if(undoStack->isActive())
     {
-        updateLabelList(currentItem);
-        updateLabeledPicture(currentItem);
-    }
-    else if(state==2)
-    {
-         ui->label_picture->setPixmap(QPixmap::fromImage(*showed));
+        undoStack->redo();
+        if(state==0||state==1)
+        {
+            updateLabelList(currentItem);
+            updateLabeledPicture(currentItem);
+        }
+        else if(state==2)
+        {
+             ui->label_picture->setPixmap(QPixmap::fromImage(*showed));
+        }
     }
 }
 

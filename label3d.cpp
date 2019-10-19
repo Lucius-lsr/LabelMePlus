@@ -373,7 +373,7 @@ void Label3D::load3DImage(QDir dir)
     }
     /*---------------载入2D图片---------------*/
     dir.setFilter(QDir::Files);
-    dir.setSorting(QDir::Name);
+    dir.setSorting(QDir::Name|QDir::Reversed);
     QFileInfoList list = dir.entryInfoList();
     /*-----------------统计有效2D图片数量作为z的高度--------------*/
     zSize=0;
@@ -1401,6 +1401,8 @@ void Label3D::finishLabel()
 
 void Label3D::saveLabel() // 将labelInfolist3D[currentItem]保存的信息输出到电脑中
 {
+    if(m_3DInfos.size()==0)
+        return;
     /*---------------------将标签信息保存在同一个目录中----------------------*/
     QFile textFile(m_3DInfos[currentItem].absolutePath()+"/"+m_3DInfos[currentItem].baseName()+".txt");
     if(textFile.open(QIODevice::WriteOnly|QIODevice::Text))
